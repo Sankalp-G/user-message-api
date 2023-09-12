@@ -36,4 +36,15 @@ router.get('/:messageId', (req, res) => {
   return res.send(messages[req.params.messageId]);
 });
 
+router.delete('/:messageId', (req, res) => {
+  const {
+    [req.params.messageId]: message,
+    ...otherMessages
+  } = messages;
+
+  messages = otherMessages;
+
+  return res.send(message);
+})
+
 module.exports = router;
