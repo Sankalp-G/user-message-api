@@ -7,6 +7,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages')
+const models = require('./models');
 
 const app = express();
 
@@ -16,22 +17,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const defaultUser = {
-  id: '1',
-  username: 'Robin Wieruch',
-};
-
 app.use((req, res, next) => {
-  req.me = defaultUser;
+  req.context = {
+    models,
+    me: models.users[1],
+  };
   next();
-})
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/messages', messagesRouter);
 
 app.get('/session', (req, res) => {
-  return res.send(req.me);
+  let users = req.context.models.users;
+  return res.send(users[req.context.me.id]);
 });
 
 // catch 404 and forward to error handler
