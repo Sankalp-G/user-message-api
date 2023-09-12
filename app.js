@@ -4,9 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const messagesRouter = require('./routes/messages')
+const routes = require('./routes');
 const models = require('./models');
 
 const app = express();
@@ -25,14 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/messages', messagesRouter);
-
-app.get('/session', (req, res) => {
-  let users = req.context.models.users;
-  return res.send(users[req.context.me.id]);
-});
+app.use('/session', routes.session);
+app.use('/users', routes.users);
+app.use('/messages', routes.messages);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
