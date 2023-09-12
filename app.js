@@ -16,6 +16,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const defaultUser = {
+  id: '1',
+  username: 'Robin Wieruch',
+};
+
+app.use((req, res, next) => {
+  req.me = defaultUser;
+  next();
+})
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/messages', messagesRouter);
