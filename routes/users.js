@@ -1,23 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-let users = {
-  1: {
-    id: '1',
-    username: 'Robin Wieruch',
-  },
-  2: {
-    id: '2',
-    username: 'Dave Davids',
-  },
-};
-
 router.get('/', (req, res) => {
-  return res.send(Object.values(users));
+  return res.send(Object.values(req.context.models.users));
 });
 
 router.get('/:userId', (req, res) => {
-  return res.send(users[req.params.userId]);
+  return res.send(req.context.models.users[req.params.userId]);
 });
 
 router.post('/', (req, res) => {
